@@ -13,18 +13,18 @@ public class proxyd {
 			ServerSocket serverSocket = null;
 			try {
 				serverSocket = new ServerSocket(port);
-				System.out.println("ÔÚ¶Ë¿Ú" + port + "Æô¶¯´úÀí·şÎñÆ÷\n");
+				System.out.println("The proxy have start on port:" + port + "\n");
 				while (true) {
 					Socket socket = null;
 					try {
 						socket = serverSocket.accept();
-						new HttpProxyMainThread(socket).start();//ÓĞÒ»¸öÇëÇó¾ÍÆô¶¯Ò»¸öÏß³Ì
+						new HttpProxyMainThread(socket).start();//æœ‰ä¸€ä¸ªè¯·æ±‚å°±å¯åŠ¨ä¸€ä¸ªçº¿ç¨‹
 					} catch (Exception e) {
-						System.out.println("Ïß³ÌÆô¶¯Ê§°Ü");
+						System.out.println("Thread start fail");
 					}
 				}
 			} catch (IOException e1) {
-				System.out.println("proxydÆô¶¯Ê§°Ü\n");
+				System.out.println("proxyd start fail\n");
 			}finally{
 				try {
 					serverSocket.close();
@@ -33,7 +33,7 @@ public class proxyd {
 				}
 			}
 		}else{
-			System.out.println("²ÎÊı´íÎó");
+			System.out.println("parameter error");
 		}
 	}
 	

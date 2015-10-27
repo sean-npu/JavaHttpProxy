@@ -7,23 +7,23 @@ import java.net.Socket;
 import edu.npu.utils.URL;
 
 public class HttpProxyMainThread extends Thread {
-	static public int CONNECT_RETRIES = 5; // ³¢ÊÔÓëÄ¿±êÖ÷»úÁ¬½Ó´ÎÊı
-	static public int CONNECT_PAUSE = 5; // Ã¿´Î½¨Á¢Á¬½ÓµÄ¼ä¸ôÊ±¼ä
-	static public int TIMEOUT = 50; // Ã¿´Î³¢ÊÔÁ¬½ÓµÄ×î´óÊ±¼ä
+	static public int CONNECT_RETRIES = 5; // å°è¯•ä¸ç›®æ ‡ä¸»æœºè¿æ¥æ¬¡æ•°
+	static public int CONNECT_PAUSE = 5; // æ¯æ¬¡å»ºç«‹è¿æ¥çš„é—´éš”æ—¶é—´
+	static public int TIMEOUT = 50; // æ¯æ¬¡å°è¯•è¿æ¥çš„æœ€å¤§æ—¶é—´
 	
-	protected Socket csocket;// Óë¿Í»§¶ËÁ¬½ÓµÄSocket
+	protected Socket csocket;// ä¸å®¢æˆ·ç«¯è¿æ¥çš„Socket
 
 	public HttpProxyMainThread(Socket cs) {
 		this.csocket = cs;
 	}
 
 	public void run() {
-		String firstLine = ""; // httpÇëÇóÍ·µÚÒ»ĞĞ
-		String urlStr = ""; // ÇëÇóµÄurl
-		Socket ssocket = null;//ÓëÄ¿±ê·şÎñÆ÷Á¬½ÓµÄsocket
-		// cisÎª¿Í»§¶ËÊäÈëÁ÷£¬sisÎªÄ¿±êÖ÷»úÊäÈëÁ÷
+		String firstLine = ""; // httpè¯·æ±‚å¤´ç¬¬ä¸€è¡Œ
+		String urlStr = ""; // è¯·æ±‚çš„url
+		Socket ssocket = null;//ä¸ç›®æ ‡æœåŠ¡å™¨è¿æ¥çš„socket
+		// cisä¸ºå®¢æˆ·ç«¯è¾“å…¥æµï¼Œsisä¸ºç›®æ ‡ä¸»æœºè¾“å…¥æµ
 		InputStream cis = null, sis = null;
-		// cosÎª¿Í»§¶ËÊä³öÁ÷£¬sosÎªÄ¿±êÖ÷»úÊä³öÁ÷
+		// cosä¸ºå®¢æˆ·ç«¯è¾“å‡ºæµï¼Œsosä¸ºç›®æ ‡ä¸»æœºè¾“å‡ºæµ
 		OutputStream cos = null, sos = null;
 		try {
 			csocket.setSoTimeout(TIMEOUT);
@@ -32,33 +32,33 @@ public class HttpProxyMainThread extends Thread {
 			while (true) {
 				int c = cis.read();
 				if (c == -1)
-					break; // -1Îª½áÎ²±êÖ¾
+					break; // -1ä¸ºç»“å°¾æ ‡å¿—
 				if (c == '\r' || c == '\n')
-					break;// ¶ÁÈëµÚÒ»ĞĞÊı¾İ,´ÓÖĞ»ñÈ¡Ä¿±êÖ÷»úurl
+					break;// è¯»å…¥ç¬¬ä¸€è¡Œæ•°æ®,ä»ä¸­è·å–ç›®æ ‡ä¸»æœºurl
 				firstLine = firstLine + (char) c;
 			}
 			urlStr = extractUrl(firstLine);
 			System.out.println(urlStr);
-			URL url = new URL(urlStr);//½«url·â×°³É¶ÔÏó£¬Íê³ÉÒ»ÏµÁĞ×ª»»¹¤×÷,²¢ÔÚgetIPÖĞÊµÏÖÁËdns»º´æ
-			firstLine = firstLine.replace(url.getScheme()+"://"+url.getHost(), "");//ÕâÒ»²½ºÜÖØÒª£¬°ÑÇëÇóÍ·µÄ¾ø¶ÔÂ·¾¶»»³ÉÏà¶ÔÂ·¾¶
+			URL url = new URL(urlStr);//å°†urlå°è£…æˆå¯¹è±¡ï¼Œå®Œæˆä¸€ç³»åˆ—è½¬æ¢å·¥ä½œ,å¹¶åœ¨getIPä¸­å®ç°äº†dnsç¼“å­˜
+			firstLine = firstLine.replace(url.getScheme()+"://"+url.getHost(), "");//è¿™ä¸€æ­¥å¾ˆé‡è¦ï¼ŒæŠŠè¯·æ±‚å¤´çš„ç»å¯¹è·¯å¾„æ¢æˆç›¸å¯¹è·¯å¾„
 			int retry = CONNECT_RETRIES;
 			while (retry-- != 0) {
 				try {
-					ssocket = new Socket(url.getIP(), url.getPort()); // ³¢ÊÔ½¨Á¢ÓëÄ¿±êÖ÷»úµÄÁ¬½Ó
-					System.out.println("+++++ÓëÄ¿±ê·şÎñÆ÷("+url.getIP()+":"+url.getPort()+")(host:"+url.getHost()+")½¨Á¢Á¬½Ó³É¹¦+++++,ÇëÇó×ÊÔ´("+url.getResource()+")");
+					ssocket = new Socket(url.getIP(), url.getPort()); // å°è¯•å»ºç«‹ä¸ç›®æ ‡ä¸»æœºçš„è¿æ¥
+					System.out.println("+++++successfully connect to ("+url.getIP()+":"+url.getPort()+")(host:"+url.getHost()+")+++++,get resource("+url.getResource()+")");
 					break;
 				} catch (Exception e) {
-					System.out.println("-----ÓëÄ¿±ê·şÎñÆ÷("+url.getIP()+":"+url.getPort()+")(host:"+url.getHost()+")½¨Á¢Á¬½ÓÊ§°Ü-----");
+					System.out.println("-----fail connect to ("+url.getIP()+":"+url.getPort()+")(host:"+url.getHost()+")-----");
 				}
-				// µÈ´ı
+				// ç­‰å¾…
 				Thread.sleep(CONNECT_PAUSE);
 			}
 			if (ssocket != null) {
 				ssocket.setSoTimeout(TIMEOUT);
 				sis = ssocket.getInputStream();
 				sos = ssocket.getOutputStream();
-				sos.write(firstLine.getBytes()); // ½«ÇëÇóÍ·Ğ´Èë
-				pipe(cis, sis, sos, cos); // ½¨Á¢Í¨ĞÅ¹ÜµÀ
+				sos.write(firstLine.getBytes()); // å°†è¯·æ±‚å¤´å†™å…¥
+				pipe(cis, sis, sos, cos); // å»ºç«‹é€šä¿¡ç®¡é“
 			}
 		} catch (Exception e) {
 			//e.printStackTrace();
@@ -78,8 +78,8 @@ public class HttpProxyMainThread extends Thread {
 		}
 	}
 	/**
-	 * ´ÓhttpÇëÇóÍ·µÄµÚÒ»ĞĞÌáÈ¡ÇëÇóµÄurl
-	 * @param firstLine httpÇëÇóÍ·µÚÒ»ĞĞ
+	 * ä»httpè¯·æ±‚å¤´çš„ç¬¬ä¸€è¡Œæå–è¯·æ±‚çš„url
+	 * @param firstLine httpè¯·æ±‚å¤´ç¬¬ä¸€è¡Œ
 	 * @return url
 	 */
 	public String extractUrl(String firstLine) {
@@ -95,11 +95,11 @@ public class HttpProxyMainThread extends Thread {
 	}
 
 	/**
-	 * Îª¿Í»§»úÓëÄ¿±ê·şÎñÆ÷½¨Á¢Í¨ĞÅ¹ÜµÀ
-	 * @param cis ¿Í»§¶ËÊäÈëÁ÷
-	 * @param sis Ä¿±êÖ÷»úÊäÈëÁ÷
-	 * @param sos Ä¿±êÖ÷»úÊä³öÁ÷
-	 * @param cos ¿Í»§¶ËÊä³öÁ÷
+	 * ä¸ºå®¢æˆ·æœºä¸ç›®æ ‡æœåŠ¡å™¨å»ºç«‹é€šä¿¡ç®¡é“
+	 * @param cis å®¢æˆ·ç«¯è¾“å…¥æµ
+	 * @param sis ç›®æ ‡ä¸»æœºè¾“å…¥æµ
+	 * @param sos ç›®æ ‡ä¸»æœºè¾“å‡ºæµ
+	 * @param cos å®¢æˆ·ç«¯è¾“å‡ºæµ
 	 */
 	public void pipe(InputStream cis, InputStream sis, OutputStream sos, OutputStream cos) {
 		Client2ServerThread c2s = new Client2ServerThread(cis, sos);

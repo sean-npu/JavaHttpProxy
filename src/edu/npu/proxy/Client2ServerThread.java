@@ -18,7 +18,7 @@ public class Client2ServerThread extends Thread{
 		while(true){
 			try {
 				if ((length = cis.read(bytes)) > 0) {
-					sos.write(bytes, 0, length);//½«httpÇëÇóÍ·Ð´µ½Ä¿±êÖ÷»ú
+					sos.write(bytes, 0, length);//å°†httpè¯·æ±‚å¤´å†™åˆ°ç›®æ ‡ä¸»æœº
 					sos.flush();
 				} else if (length < 0)
 					break;

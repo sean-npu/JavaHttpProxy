@@ -59,7 +59,7 @@ public class URL {
 		String host = "";
 		String port = "80";
 		int index;
-		// ≥È»°host
+		// ÊäΩÂèñhost
 		index = url.indexOf("//");
 		if (index != -1)
 			scheme = url.substring(0, index - 1);
