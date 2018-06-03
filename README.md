@@ -1,4 +1,4 @@
 # JavaHttpProxy
 a proxy by java
 
-detail:http://www.chmod764sean.com/computer-tec/network/731.html
+detail:http://www.fullstackdevel.com/computer-tec/network/731.html
